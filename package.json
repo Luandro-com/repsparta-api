@@ -15,9 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/luandro/claudia-api-boilerplate.git"
   },
-  "keywords": [
-
-  ],
+  "keywords": [],
   "author": "Luandro Vieira",
   "license": "MIT",
   "bugs": {
@@ -27,6 +25,7 @@
   "dependencies": {
     "bluebird": "^3.4.0",
     "claudia-api-builder": "^1.1.0",
+    "cors": "^2.7.1",
     "denodeify": "^1.2.1",
     "woocommerce-api": "^1.2.0"
   },
