@@ -9,7 +9,7 @@ var configUrl = process.env.URL;
 var configConsumerKey = process.env.CONSUMERKEY;
 var configConsumerSecret = process.env.CONSUMERSECRET;
 
-var whitelist = ['http://dev.repsparta.com', 'http://repsparta.com', 'https://repsparta.com'];
+var whitelist = ['http://dev.repsparta.com', 'http://repsparta.com', 'https://repsparta.com', 'http://locahost:300'];
 var corsOptions = {
   origin: function(origin, callback){
     var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
@@ -33,8 +33,8 @@ console.log(configConsumerKey)
  * Products API
  */
 app.get('/products', cors(corsOptions), function (req, res) {
+  console.log("Acessing /products");
   WooCommerce.get('products', function (err, data, response) {
-    console.log('data', data)
     if (data.statusCode === 200) {
       var formatedData = JSON.parse(response);
       res.status(200).json(formatedData);
@@ -46,7 +46,8 @@ app.get('/products', cors(corsOptions), function (req, res) {
 /**
  * Orders API
  */
-app.post('/api/order', function (req, res) {
+app.post('/order', cors(corsOptions), function (req, res) {
+  console.log("Acessing /order POST", req.body);
   var data = req.body;
   WooCommerce.post('orders', data, function (error, data, wooRes) {
     var formatedWoo = JSON.parse(wooRes);
