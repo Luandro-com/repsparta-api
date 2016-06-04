@@ -24,7 +24,7 @@ const whitelist = [
   'http://beta.repsparta.com',
   'http://repsparta.com',
   'https://repsparta.com',
-  'http://locahost:300',
+  'http://locahost:3000',
   'http://dev.repsparta.com'
 ];
 
