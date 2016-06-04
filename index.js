@@ -9,11 +9,11 @@ const pagseguro = require('pagseguro');
 const XMLparser = require('xml2json');
 const uuid = require('node-uuid').v4;
 
-const configUrl = process.env.URL;
-const configConsumerKey = process.env.CONSUMERKEY;
-const configConsumerSecret = process.env.CONSUMERSECRET;
-const configToken = process.env.TOKEN;
-const configEmail = process.env.EMAIL;
+const configUrl = process.env.URL || require('./config').adminUrl;
+const configConsumerKey = process.env.CONSUMERKEY || require('./config').consumerKey;
+const configConsumerSecret = process.env.CONSUMERSECRET || require('./config').consumerSecret;
+const configToken = process.env.TOKEN || require('./config').token;
+const configEmail = process.env.EMAIL || require('./config').email;
 
 const whitelist = [
   'http://alpha.repsparta.com',
