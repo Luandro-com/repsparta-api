@@ -1,22 +1,21 @@
 'use strict';
 
-var express = require('express');
-var cors = require('cors');
-var app = express();
-var port = process.env.PORT || 3001;
-var WooCommerceAPI = require('woocommerce-api');
-var pagseguro = require('pagseguro');
-var XMLparser = require('xml2json');
-var uuid = require('node-uuid').v4;
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const port = process.env.PORT || 3001;
+const WooCommerceAPI = require('woocommerce-api');
+const pagseguro = require('pagseguro');
+const XMLparser = require('xml2json');
+const uuid = require('node-uuid').v4;
 
+const configUrl = process.env.URL;
+const configConsumerKey = process.env.CONSUMERKEY;
+const configConsumerSecret = process.env.CONSUMERSECRET;
+const configToken = process.env.TOKEN;
+const configEmail = process.env.EMAIL;
 
-var configUrl = process.env.URL;
-var configConsumerKey = process.env.CONSUMERKEY;
-var configConsumerSecret = process.env.CONSUMERSECRET;
-var configToken = process.env.TOKEN;
-var configEmail = process.env.EMAIL;
-
-var whitelist = [
+const whitelist = [
   'http://alpha.repsparta.com',
   'http://beta.repsparta.com',
   'http://repsparta.com',
@@ -25,20 +24,20 @@ var whitelist = [
   'http://dev.repsparta.com'
 ];
 
-var corsOptions = {
+const corsOptions = {
   origin: function(origin, callback){
-    var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+    const originIsWhitelisted = whitelist.indexOf(origin) !== -1;
     callback(null, originIsWhitelisted);
   }
 };
 
-var WooCommerce = new WooCommerceAPI({
+const WooCommerce = new WooCommerceAPI({
   url: configUrl,
   consumerKey: configConsumerKey,
   consumerSecret: configConsumerSecret
 });
 
-var pag = new pagseguro({
+const pag = new pagseguro({
   email : configEmail,
   token: configToken,
   mode : 'sandbox'
@@ -47,7 +46,7 @@ var pag = new pagseguro({
 /**
  * Hello
 */
-app.get('/hello', function(req, res) {
+app.get('/hello', (req, res) => {
     console.log(configUrl)
 console.log(configConsumerKey)
     res.send('YYYYYYoooooooo!');
@@ -99,11 +98,11 @@ console.log(configConsumerKey)
 /**
  * Products API
  */
-app.get('/api/products', cors(corsOptions), function (req, res) {
+app.get('/api/products', cors(corsOptions), (req, res) => {
   console.log("Acessing /products");
-  WooCommerce.get('products', function (err, data, response) {
+  WooCommerce.get('products', (err, data, response) => {
     if (data.statusCode === 200) {
-      var formatedData = JSON.parse(response);
+      const formatedData = JSON.parse(response);
       res.status(200).json(formatedData);
     } else {
       res.status(data.statusCode).send(response);
@@ -113,11 +112,11 @@ app.get('/api/products', cors(corsOptions), function (req, res) {
 /**
  * Orders API
  */
-app.post('/api/order', cors(corsOptions), function (req, res) {
+app.post('/api/order', cors(corsOptions), (req, res) => {
   console.log("Acessing /order POST", req.body);
-  var data = req.body;
-  WooCommerce.post('orders', data, function (error, data, wooRes) {
-    var formatedWoo = JSON.parse(wooRes);
+  const data = req.body;
+  WooCommerce.post('orders', data, (error, data, wooRes) => {
+    const formatedWoo = JSON.parse(wooRes);
     if (formatedWoo.order) {
       res.send({
         ok: true,
@@ -132,10 +131,9 @@ app.post('/api/order', cors(corsOptions), function (req, res) {
   });
 });
 
-app.listen(port, function (err) {
+app.listen(port, (err) => {
   if (err) {
     console.log("ERROR: ", err);
   }
   console.log("Listening of port", port);
 });
-
