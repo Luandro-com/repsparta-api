@@ -60,9 +60,8 @@ console.log(configConsumerKey)
  */
  app.post('/api/payment', cors(corsOptions), (req, res) => {
    console.log('acessing /payment POST');
-   console.log(req.body);
-   const data = req.body.order;
-   data.line_items.map((item) => {
+   const data = req.body;
+   data.cart.map((item) => {
      pag.addItem({
          id: item.id,
          description: item.name,
@@ -76,8 +75,8 @@ console.log(configConsumerKey)
    pag.setNotificationURL("http://loja.repsparta.com/shop");
    pag.reference(uuid());
    pag.buyer({
-       name: data.billing_address.first_name,
-       email: data.billing_address.email,
+       name: data.full_name,
+       email: data.email,
        country: 'BRA'
    });
    pag.send((err, payRes) => {
