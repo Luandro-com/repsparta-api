@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3001;
@@ -8,6 +9,9 @@ const WooCommerceAPI = require('woocommerce-api');
 const pagseguro = require('pagseguro');
 const XMLparser = require('xml2json');
 const uuid = require('node-uuid').v4;
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 const configUrl = process.env.URL || require('./config').adminUrl;
 const configConsumerKey = process.env.CONSUMERKEY || require('./config').consumerKey;
