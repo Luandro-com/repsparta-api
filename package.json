@@ -27,7 +27,10 @@
     "claudia-api-builder": "^1.1.0",
     "cors": "^2.7.1",
     "denodeify": "^1.2.1",
-    "woocommerce-api": "^1.2.0"
+    "node-uuid": "^1.4.7",
+    "pagseguro": "^0.1.0",
+    "woocommerce-api": "^1.2.0",
+    "xml2json": "^0.9.1"
   },
   "devDependencies": {
     "babel-cli": "^6.7.7",
