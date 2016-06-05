@@ -12,7 +12,6 @@ const uuid = require('node-uuid').v4;
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
 const configUrl = process.env.URL || require('./config').adminUrl;
 const configConsumerKey = process.env.CONSUMERKEY || require('./config').consumerKey;
 const configConsumerSecret = process.env.CONSUMERSECRET || require('./config').consumerSecret;
@@ -52,13 +51,14 @@ const pag = new pagseguro({
 */
 app.get('/hello', (req, res) => {
     console.log(configUrl)
-console.log(configConsumerKey)
+    console.log(configConsumerKey)
     res.send('YYYYYYoooooooo!');
 });
 /**
  * Payment
  */
- app.post('/api/payment', cors(corsOptions), (req, res) => {
+app.options('/api/payment', cors(corsOptions));
+ app.post('/api/payment', cors(corsOptions), req, res) => {
    console.log('acessing /payment POST');
    const data = req.body;
    data.cart.map((item) => {
@@ -101,7 +101,7 @@ console.log(configConsumerKey)
 /**
  * Products API
  */
-app.get('/api/products', cors(corsOptions), (req, res) => {
+app.get('/api/products'), cors(corsOptions), (req, res) => {
   console.log("Acessing /products");
   WooCommerce.get('products', (err, data, response) => {
     if (data.statusCode === 200) {
@@ -115,6 +115,7 @@ app.get('/api/products', cors(corsOptions), (req, res) => {
 /**
  * Orders API
  */
+app.options('/api/order', cors(corsOptions));
 app.post('/api/order', cors(corsOptions), (req, res) => {
   console.log("Acessing /order POST", req.body);
   const data = req.body;
