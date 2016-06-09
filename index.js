@@ -18,11 +18,9 @@ const configToken = process.env.TOKEN || require('./config').token;
 const configEmail = process.env.EMAIL || require('./config').email;
 
 const whitelist = [
-  'http://alpha.repsparta.com',
   'http://beta.repsparta.com',
   'http://repsparta.com',
   'https://repsparta.com',
-  'http://dev.repsparta.com',
   'https://pagseguro.uol.com.br'
 ];
 
@@ -42,16 +40,16 @@ const WooCommerce = new WooCommerceAPI({
 const pag = new pagseguro({
   email : configEmail,
   token: configToken,
-  mode : 'sandbox'
+  // mode : 'sandbox'
 });
 
 /**
  * Hello
 */
-app.get('/hello', (req, res) => {
+app.get('/api/hello', (req, res) => {
     console.log(configUrl);
     console.log(configConsumerKey);
-    res.send('YYYYYYoooooooo!');
+    res.send('YYYYYYoooooooo! Welcome to Spartas API');
 });
 /**
  * Payment Sucess from Store
