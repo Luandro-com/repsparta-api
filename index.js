@@ -210,7 +210,7 @@ app.listen(port, (err) => {
  * Post Order Notes API
  */
  app.options('/api/order_notes', cors(corsOptions));
- app.post('/api/order_notes', (req, res) => {
+ app.post('/api/order_notes', cors(corsOptions), (req, res) => {
    const data = req.body;
    console.log("Acessing /order_notes POST", req.body);
    WooCommerce.post(`orders/${data.id}/notes`, data.note, (error, data, wooRes) => {
