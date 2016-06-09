@@ -23,7 +23,6 @@ const whitelist = [
   'http://beta.repsparta.com',
   'http://repsparta.com',
   'https://repsparta.com',
-  'http://localhost:3000',
   'http://dev.repsparta.com',
   'https://pagseguro.uol.com.br'
 ];
