@@ -8,7 +8,6 @@ const port = process.env.PORT || 3001;
 const WooCommerceAPI = require('woocommerce-api');
 const pagseguro = require('pagseguro');
 const XMLparser = require('xml2json');
-const data.ref = require('node-data.ref').v4;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -85,8 +84,8 @@ app.get('/hello', (req, res) => {
          ok: false
        })
      }
-   });;
- }
+   });
+ });
  /**
   * Payment Sucess from PagSeguro
   */
@@ -119,7 +118,7 @@ app.get('/hello', (req, res) => {
   //      })
   //    }
   //  });;
- }
+});
 /**
  * Payment
  */
