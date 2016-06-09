@@ -24,7 +24,8 @@ const whitelist = [
   'http://repsparta.com',
   'https://repsparta.com',
   'http://localhost:3000',
-  'http://dev.repsparta.com'
+  'http://dev.repsparta.com',
+  'https://pagseguro.uol.com.br'
 ];
 
 const corsOptions = {
@@ -55,6 +56,72 @@ app.get('/hello', (req, res) => {
     res.send('YYYYYYoooooooo!');
 });
 /**
+ * Payment Sucess from Store
+ */
+ app.options('/api/payment_success', cors(corsOptions));
+ app.post('/api/payment_success', cors(corsOptions), (req, res) => {
+   console.log('acessing /payment_success POST');
+   var data = {
+     order: {
+       status: 'completed',
+       payment_details: {
+         method_id: 'pagseguro',
+         method_title: 'PagSeguro',
+         paid: true
+       },
+       transaction_id: req.body.transactionCode
+     }
+   };
+
+   WooCommerce.put(`orders/${req.body.orderId}`, data, function(err, data, wooRes) {
+     const formatedWoo = JSON.parse(wooRes);
+     if(formatedWoo.order) {
+       res.send({
+         ok: true,
+         order_number: formatedWoo.order.order_number,
+         order_key: formatedWoo.order.order_key
+       })
+     } else {
+       res.send({
+         ok: false
+       })
+     }
+   });;
+ }
+ /**
+  * Payment Sucess from PagSeguro
+  */
+ app.options('/api/pag_payment_success', cors(corsOptions));
+ app.post('/api/pag_payment_success', cors(corsOptions), (req, res) => {
+   console.log('acessing /pag_payment_success POST');
+   var data = {
+     order: {
+       status: 'completed',
+       payment_details: {
+         method_id: 'pagseguro',
+         method_title: 'PagSeguro',
+         paid: true
+       },
+       transaction_id: req.body.transaction
+     }
+   };
+   console.log(req.body);
+  //  WooCommerce.put(`orders/${req.body.orderId}`, data, function(err, data, wooRes) {
+  //    const formatedWoo = JSON.parse(wooRes);
+  //    if(formatedWoo.order) {
+  //      res.send({
+  //        ok: true,
+  //        order_number: formatedWoo.order.order_number,
+  //        order_key: formatedWoo.order.order_key
+  //      })
+  //    } else {
+  //      res.send({
+  //        ok: false
+  //      })
+  //    }
+  //  });;
+ }
+/**
  * Payment
  */
 app.options('/api/payment', cors(corsOptions));
@@ -71,8 +138,8 @@ app.post('/api/payment', cors(corsOptions), (req, res) => {
      });
    });
    pag.currency('BRL');
-   pag.setRedirectURL("http://loja.repsparta.com");
-   pag.setNotificationURL("http://loja.repsparta.com/shop");
+   pag.setRedirectURL("http://beta.repsparta.com/success");
+   pag.setNotificationURL("https://repsparta-api.luandro.com/api/payment_success");
    pag.reference(uuid());
    pag.buyer({
        name: data.full_name,
@@ -141,3 +208,25 @@ app.listen(port, (err) => {
   }
   console.log("Listening of port", port);
 });
+/**
+ * Post Order Notes API
+ */
+ app.post('/api/order_notes', (req, res) => {
+   const data = req.body;
+   console.log("Acessing /order_notes POST", req.body);
+   WooCommerce.post(`orders/${data.id}/notes`, data.note, (error, data, wooRes) => {
+     const formatedWoo = JSON.parse(wooRes);
+     if(formatedWoo.order) {
+       res.send({
+         ok: true,
+         order_number: formatedWoo.order.order_number,
+         order_key: formatedWoo.order.order_key
+       })
+     } else {
+       res.send({
+         ok: false
+       })
+     }
+
+    });
+ });
