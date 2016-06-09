@@ -8,7 +8,7 @@ const port = process.env.PORT || 3001;
 const WooCommerceAPI = require('woocommerce-api');
 const pagseguro = require('pagseguro');
 const XMLparser = require('xml2json');
-const uuid = require('node-uuid').v4;
+const data.ref = require('node-data.ref').v4;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -139,7 +139,7 @@ app.post('/api/payment', cors(corsOptions), (req, res) => {
    pag.currency('BRL');
    pag.setRedirectURL("http://beta.repsparta.com/success");
    pag.setNotificationURL("https://repsparta-api.luandro.com/api/payment_success");
-   pag.reference(uuid());
+   pag.reference(data.ref);
    pag.buyer({
        name: data.full_name,
        email: data.email,
