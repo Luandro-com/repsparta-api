@@ -137,7 +137,7 @@ app.post('/api/payment', cors(corsOptions), (req, res) => {
    });
    pag.currency('BRL');
    pag.setRedirectURL("http://beta.repsparta.com/success");
-   pag.setNotificationURL("https://repsparta-api.luandro.com/api/payment_success");
+   pag.setNotificationURL("https://repsparta-api.luandro.com/api/pag_payment_success");
    pag.reference(data.ref);
    pag.buyer({
        name: data.full_name,
