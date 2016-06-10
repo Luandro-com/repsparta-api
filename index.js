@@ -21,7 +21,8 @@ const whitelist = [
   'http://beta.repsparta.com',
   'http://repsparta.com',
   'https://repsparta.com',
-  'https://pagseguro.uol.com.br'
+  'https://pagseguro.uol.com.br',
+  'http://localhost:3000'
 ];
 
 const corsOptions = {
@@ -124,6 +125,7 @@ app.options('/api/payment', cors(corsOptions));
 app.post('/api/payment', cors(corsOptions), (req, res) => {
    console.log('acessing /payment POST');
    const data = req.body;
+   console.log(data);
    data.cart.map((item) => {
      pag.addItem({
          id: item.id,
@@ -134,7 +136,7 @@ app.post('/api/payment', cors(corsOptions), (req, res) => {
      });
    });
    pag.currency('BRL');
-   pag.setRedirectURL("http://beta.repsparta.com/success");
+   pag.setRedirectURL("http://repsparta.com/success");
    pag.setNotificationURL("https://repsparta-api.luandro.com/api/pag_payment_success");
    pag.reference(data.ref);
    pag.buyer({
@@ -210,9 +212,10 @@ app.listen(port, (err) => {
  app.options('/api/order_notes', cors(corsOptions));
  app.post('/api/order_notes', cors(corsOptions), (req, res) => {
    const data = req.body;
-   console.log("Acessing /order_notes POST", req.body);
-   WooCommerce.post(`orders/${data.id}/notes`, data.note, (error, data, wooRes) => {
+   console.log("Acessing /order_notes POST", data);
+   WooCommerce.post(`orders/${data.id}/notes`, data.notes, (error, data, wooRes) => {
      const formatedWoo = JSON.parse(wooRes);
+     console.log(formatedWoo);
      if(formatedWoo.order) {
        res.send({
          ok: true,
