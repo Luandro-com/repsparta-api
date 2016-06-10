@@ -139,7 +139,7 @@ app.post('/api/payment', cors(corsOptions), (req, res) => {
    pag.currency('BRL');
    pag.setRedirectURL("http://repsparta.com/success");
    pag.setNotificationURL("https://repsparta-api.luandro.com/api/pag_payment_success");
-   pag.reference(uuid);
+   pag.reference(uuid());
    pag.buyer({
        name: data.full_name,
        email: data.email,
