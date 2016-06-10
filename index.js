@@ -39,12 +39,6 @@ const WooCommerce = new WooCommerceAPI({
   consumerSecret: configConsumerSecret
 });
 
-const pag = new pagseguro({
-  email : configEmail,
-  token: configToken,
-  // mode : 'sandbox'
-});
-
 /**
  * Hello
 */
@@ -124,10 +118,19 @@ app.get('/api/hello', (req, res) => {
  */
 app.options('/api/payment', cors(corsOptions));
 app.post('/api/payment', cors(corsOptions), (req, res) => {
+  const pag = new pagseguro({
+      email : configEmail,
+      token: configToken,
+      // mode : 'sandbox'
+   });
    console.log('acessing /payment POST');
    const data = req.body;
    console.log(data);
+   pag.reference(uuid());
+   pag.currency('BRL');
+
    data.cart.map((item) => {
+     console.log('Adding...', item);
      pag.addItem({
          id: item.id,
          description: item.name,
@@ -136,10 +139,8 @@ app.post('/api/payment', cors(corsOptions), (req, res) => {
          weight: ''
      });
    });
-   pag.currency('BRL');
    pag.setRedirectURL("http://repsparta.com/success");
    pag.setNotificationURL("https://repsparta-api.luandro.com/api/pag_payment_success");
-   pag.reference(uuid());
    pag.buyer({
        name: data.full_name,
        email: data.email,
@@ -151,6 +152,7 @@ app.post('/api/payment', cors(corsOptions), (req, res) => {
      }
      const formatedData = XMLparser.toJson(payRes, {object: true});
      console.log('Payment response', formatedData);
+     console.log('========================== END OF PAYMENT ====================');
      if(formatedData.checkout) {
        res.status(200).json({
          ok: true,
