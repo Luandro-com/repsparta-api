@@ -87,40 +87,60 @@ app.get('/api/hello', (req, res) => {
  app.options('/api/pag_payment_success', cors(corsOptions));
  app.post('/api/pag_payment_success', cors(corsOptions), (req, res) => {
    console.log('acessing /pag_payment_success POST');
-  //  var data = {
-  //    order: {
-  //      status: 'completed',
-  //      payment_details: {
-  //        method_id: 'pagseguro',
-  //        method_title: 'PagSeguro',
-  //        paid: true
-  //      },
-  //      transaction_id: req.body.transaction
-  //    }
-  //  };
    console.log(req.body);
    request(`https://ws.pagseguro.uol.com.br/v2/transactions/notifications/${req.body.notificationCode}?email=${configEmail}&token=${configToken}`,
    (error, response, body) => {
      if (!error && response.statusCode == 200) {
        const formatedData = XMLparser.toJson(body, {object: true});
        console.log(formatedData);
+       const pagData = formatedData.transaction;
+       let status, paid = false;
+       switch(pagData.status) {
+         case 1:
+          status = 'pending';
+         case 2:
+          status = 'processing';
+         case 3:
+          status = 'completed';
+          paid = true;
+        case 4:
+          status = 'completed';
+        case 5:
+          status = 'on-hold';
+        case 6:
+          status = 'refunded';
+        case 7:
+          status = 'failed';
+         default:
+          status = 'pending';
+       }
+       var data = {
+         order: {
+           status: status,
+           payment_details: {
+             method_id: 'pagseguro',
+             method_title: 'PagSeguro',
+             paid: paid
+           },
+           transaction_id: pagData.code
+         }
+       };
+       WooCommerce.put(`orders/${pagData.reference}`, data, function(err, data, wooRes) {
+         const formatedWoo = JSON.parse(wooRes);
+         if(formatedWoo.order) {
+           res.send({
+             ok: true,
+             order_number: formatedWoo.order.order_number,
+             order_key: formatedWoo.order.order_key
+           })
+         } else {
+           res.send({
+             ok: false
+           })
+         }
+       });
      }
   })
-
-  //  WooCommerce.put(`orders/${req.body.orderId}`, data, function(err, data, wooRes) {
-  //    const formatedWoo = JSON.parse(wooRes);
-  //    if(formatedWoo.order) {
-  //      res.send({
-  //        ok: true,
-  //        order_number: formatedWoo.order.order_number,
-  //        order_key: formatedWoo.order.order_key
-  //      })
-  //    } else {
-  //      res.send({
-  //        ok: false
-  //      })
-  //    }
-  //  });;
 });
 /**
  * Payment
