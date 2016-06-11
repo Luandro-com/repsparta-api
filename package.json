@@ -30,6 +30,7 @@
     "denodeify": "^1.2.1",
     "node-uuid": "^1.4.7",
     "pagseguro": "^0.1.0",
+    "request": "^2.72.0",
     "woocommerce-api": "^1.2.0",
     "xml2json": "^0.9.1"
   },

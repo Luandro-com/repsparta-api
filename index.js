@@ -86,18 +86,25 @@ app.get('/api/hello', (req, res) => {
  app.options('/api/pag_payment_success', cors(corsOptions));
  app.post('/api/pag_payment_success', cors(corsOptions), (req, res) => {
    console.log('acessing /pag_payment_success POST');
-   var data = {
-     order: {
-       status: 'completed',
-       payment_details: {
-         method_id: 'pagseguro',
-         method_title: 'PagSeguro',
-         paid: true
-       },
-       transaction_id: req.body.transaction
-     }
-   };
+  //  var data = {
+  //    order: {
+  //      status: 'completed',
+  //      payment_details: {
+  //        method_id: 'pagseguro',
+  //        method_title: 'PagSeguro',
+  //        paid: true
+  //      },
+  //      transaction_id: req.body.transaction
+  //    }
+  //  };
    console.log(req.body);
+   request(`https://ws.pagseguro.uol.com.br/v2/transactions/notifications/${req.body.notificationCode}?email=${configEmail}&token=${configToken}`,
+   (error, response, body) => {
+     if (!error && response.statusCode == 200) {
+       console.log(body)
+     }
+  })
+
   //  WooCommerce.put(`orders/${req.body.orderId}`, data, function(err, data, wooRes) {
   //    const formatedWoo = JSON.parse(wooRes);
   //    if(formatedWoo.order) {
@@ -126,7 +133,7 @@ app.post('/api/payment', cors(corsOptions), (req, res) => {
    console.log('acessing /payment POST');
    const data = req.body;
    console.log(data);
-   pag.reference(uuid());
+   pag.reference(data.ref);
    pag.currency('BRL');
 
    data.cart.map((item) => {
