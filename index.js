@@ -52,8 +52,8 @@ app.get('/api/hello', (req, res) => {
  * Payment Sucess from Store
  */
  app.options('/api/payment_success', cors(corsOptions));
- app.post('/api/payment_success', cors(corsOptions), (req, res) => {
-   console.log('acessing /payment_success POST');
+ app.put('/api/payment_success', cors(corsOptions), (req, res) => {
+   console.log('acessing /payment_success PUT');
    var data = {
      order: {
        status: 'completed',
@@ -102,7 +102,8 @@ app.get('/api/hello', (req, res) => {
    request(`https://ws.pagseguro.uol.com.br/v2/transactions/notifications/${req.body.notificationCode}?email=${configEmail}&token=${configToken}`,
    (error, response, body) => {
      if (!error && response.statusCode == 200) {
-       console.log(body)
+       const formatedData = XMLparser.toJson(body, {object: true});
+       console.log(formatedData);
      }
   })
 
@@ -138,7 +139,6 @@ app.post('/api/payment', cors(corsOptions), (req, res) => {
    pag.currency('BRL');
 
    data.cart.map((item) => {
-     console.log('Adding...', item);
      pag.addItem({
          id: item.id,
          description: item.name,
