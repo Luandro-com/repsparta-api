@@ -127,6 +127,7 @@ app.get('/api/hello', (req, res) => {
        };
        WooCommerce.put(`orders/${pagData.reference}`, data, function(err, data, wooRes) {
          const formatedWoo = JSON.parse(wooRes);
+         console.log(formatedWoo);
          if(formatedWoo.order) {
            res.send({
              ok: true,
