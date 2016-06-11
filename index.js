@@ -9,6 +9,7 @@ const WooCommerceAPI = require('woocommerce-api');
 const uuid = require('node-uuid').v4;
 const pagseguro = require('pagseguro');
 const XMLparser = require('xml2json');
+const request = require('request');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
