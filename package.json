@@ -5,10 +5,8 @@
   "main": "src/service.js",
   "files": "*.js",
   "scripts": {
-    "start": "nodemon src/devServer.js --exec babel-node --presets es2015,stage-0",
-    "build": "babel src/service.js -o index.js",
-    "buid:api": "babel src/devServer.js -o index_api.js",
-    "update": "npm run build && claudia update",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "mocha --compilers js:babel-register"
   },
   "repository": {

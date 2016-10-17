@@ -201,11 +201,13 @@ app.post('/api/payment', cors(corsOptions), (req, res) => {
 app.get('/api/products', cors(corsOptions), (req, res) => {
   console.log("Acessing /products");
   WooCommerce.get('products', (err, data, response) => {
-    if (data.statusCode === 200) {
+    if (data && data.statusCode === 200) {
       const formatedData = JSON.parse(response);
       res.status(200).json(formatedData);
-    } else {
+    } else if (data) {
       res.status(data.statusCode).send(response);
+    } else {
+      res.status(501).send(response)
     }
   });
 });
