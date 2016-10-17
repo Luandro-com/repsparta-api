@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const WooCommerce = require('../../woocommerce.js');
+const WooCommerce = require('../../woocommerce');
 
  /**
   * Products API

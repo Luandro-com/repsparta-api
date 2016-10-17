@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const WooCommerce = require('../../woocommerce.js');
-const pag = require('../../pagseguro.js');
+const WooCommerce = require('../../woocommerce');
+const pag = require('../../pagseguro');
 const XMLparser = require('xml2json');
 
 /**
